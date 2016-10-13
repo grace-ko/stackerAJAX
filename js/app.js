@@ -91,4 +91,66 @@ $(document).ready( function() {
 		var tags = $(this).find("input[name='tags']").val();
 		getUnanswered(tags);
 	});
+
+
+	$('.inspiration-getter').submit(function(e){
+		e.preventDefault();
+		$('.results').html('');
+		var searchTerm=($(this).find("input[name='answerers']").val());
+		topAnswerers(searchTerm);
+		$('.search-results').text('Result of Top Answerers of All Time');
+
+	});
 });
+
+
+var topAnswerers = function(searchTerm){
+
+	var params={
+		page:'1',
+		pagesize: '30',
+		site:'stackoverflow'
+
+	}
+	url="http://api.stackexchange.com/2.2/tags/"+searchTerm+"/top-answerers/all_time";
+	$.getJSON(url, params, function(data){
+		var getResult=data.items;
+		showResult(getResult);
+	});
+}
+
+function showResult(data){
+	$.each(data, function(index, value){
+		var name=value.user.display_name;
+		var image=value.user.profile_image;
+		var link=value.user.link;
+		var reputation=value.user.reputation;
+		console.log(name, image, link, reputation);
+		$('.results').append('Name:'+" "+name+'<br>'+'Reputation:'+" "+reputation+'<br>'+'<a href="'+link+'">'+'<img src="'+image+'">'+'</a>'+'<br>'+'<br>');
+	});
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
